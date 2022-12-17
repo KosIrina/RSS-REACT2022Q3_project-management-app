@@ -25,6 +25,13 @@ type TBoardColumnProps = TColumn & {
     order: number;
   }) => void;
   deleteTask: (columnId: string, taskId: string) => void;
+  updateTask: (
+    columnId: string,
+    taskId: string,
+    title: string,
+    order: number,
+    description: string
+  ) => void;
 };
 
 function BoardColumn({
@@ -36,6 +43,7 @@ function BoardColumn({
   deleteColumn,
   openTaskForm,
   deleteTask,
+  updateTask,
 }: TBoardColumnProps) {
   const { t } = useTranslation('board-management-page');
 
@@ -59,7 +67,7 @@ function BoardColumn({
     openTaskForm({
       isOpen: true,
       columnId: id,
-      order: items && items.length ? items[items.length - 1].order + 1 : 0,
+      order: items.length,
     });
   };
 
@@ -83,7 +91,7 @@ function BoardColumn({
           deleteColumn={handleDeleteColumn}
           updateColumnTitle={handleUpdateTitle}
         />
-        <TaskList items={items} columnId={id} deleteTask={deleteTask} />
+        <TaskList items={items} columnId={id} deleteTask={deleteTask} updateTask={updateTask} />
         <Box p={1}>
           <Button
             className={styles.addButton}

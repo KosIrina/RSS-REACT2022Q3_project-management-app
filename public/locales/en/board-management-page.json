@@ -11,7 +11,6 @@
   "taskNotCreated": "Task didn't create",
   "taskDeleted": "Task deleted",
   "taskNotDeleted": "Task not deleted",
-  "deleteLabel": "Delete column",
   "titleUpdated": "Title has been updated",
   "titleNotUpdated": "Title has not been updated",
   "emptyName": "Column name can't be empty",
@@ -22,5 +21,7 @@
   "deleteTaskInfo": "task ''{{ title }}''",
   "formTitle": "Create a column",
   "createTask": "Create a task",
-  "editTask": "Edit task"
+  "editTask": "Edit task",
+  "taskNotUpdated": "Task didn't update",
+  "taskUpdated": "Task updated"
 }

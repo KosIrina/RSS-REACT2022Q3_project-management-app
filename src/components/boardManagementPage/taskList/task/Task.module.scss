@@ -27,7 +27,18 @@
   flex-direction: column;
 }
 
-.dialogContent {
+.dialogConfirmation {
   position: relative;
   min-height: 265px;
+}
+
+.formTitle {
+  text-align: center;
+  margin-bottom: 0;
+  color: #1a1a1a;
+}
+
+.dialogEdit {
+  position: relative;
+  min-height: 340px;
 }

@@ -42,8 +42,23 @@ type TBoardProps = {
   columns: TColumn[];
   setSnackBar: React.Dispatch<React.SetStateAction<TSnackBarState>>;
   setColumns: React.Dispatch<React.SetStateAction<TColumn[]>>;
-  openTaskForm: ({ isOpen, columnId }: { isOpen: boolean; columnId: string }) => void;
+  openTaskForm: ({
+    isOpen,
+    columnId,
+    order,
+  }: {
+    isOpen: boolean;
+    columnId: string;
+    order: number;
+  }) => void;
   deleteTask: (columnId: string, taskId: string) => void;
+  updateTask: (
+    columnId: string,
+    taskId: string,
+    title: string,
+    order: number,
+    description: string
+  ) => void;
 };
 
 function Board({
@@ -53,6 +68,7 @@ function Board({
   setSnackBar,
   openTaskForm,
   deleteTask,
+  updateTask,
 }: TBoardProps) {
   const [showLoader, setShowLoader] = useState(false);
   const [activeItem, setActiveItem] = useState<TTask | null>(null);
@@ -227,10 +243,10 @@ function Board({
     setActiveItem(null);
   };
 
-  const deleteColumn = (columnId: string) => {
+  const deleteColumn = async (columnId: string) => {
     setShowLoader(true);
 
-    const dataColumn = ColumnAPI.delete(user.token, boardId, columnId);
+    const dataColumn = await ColumnAPI.delete(user.token, boardId, columnId);
 
     if (!dataColumn) {
       setShowLoader(false);
@@ -256,9 +272,9 @@ function Board({
     }));
   };
 
-  const updateColumnTitle = (columnId: string, title: string, order: number) => {
+  const updateColumnTitle = async (columnId: string, title: string, order: number) => {
     setShowLoader(true);
-    const columnTitle = ColumnAPI.update(user.token, boardId, columnId, title, order);
+    const columnTitle = await ColumnAPI.update(user.token, boardId, columnId, title, order);
     setShowLoader(false);
 
     if (!columnTitle) {
@@ -302,6 +318,7 @@ function Board({
                         updateColumnTitle={updateColumnTitle}
                         openTaskForm={openTaskForm}
                         deleteTask={deleteTask}
+                        updateTask={updateTask}
                         {...column}
                       />
                     )

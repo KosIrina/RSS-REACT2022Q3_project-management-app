@@ -9,38 +9,62 @@ import Loader from 'components/common/loader';
 import { DialogContent } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import styles from './Task.module.scss';
-import EditTaskForm from './editTaskForm';
 
 const ConfirmationPopup = lazy(() => import('components/common/confirmationPopup'));
+const EditTaskForm = lazy(() => import('./editTaskForm'));
 
 interface ITaskProps {
   title: string;
+  description: string;
+  order: number;
+  columnId: string;
+  _id: string;
   isDragging?: boolean;
   isOverlay?: boolean;
   deleteTask?: () => void;
-  openEditForm?: () => void;
+  openEditForm?: (
+    columnId: string,
+    taskId: string,
+    title: string,
+    order: number,
+    description: string
+  ) => void;
 }
 
 function Task({
   title,
+  description,
+  order,
+  columnId,
+  _id,
   isDragging = false,
   isOverlay = false,
   deleteTask = () => {},
   openEditForm = () => {},
 }: ITaskProps) {
   const [openConfirmationForm, setOpenConfirmationForm] = useState(false);
+  const [editForm, setOpenEditForm] = useState(false);
   const { t } = useTranslation('board-management-page');
 
   const handleOpenEdit = () => {
-    openEditForm?.();
+    setOpenEditForm(true);
   };
 
   const handleOpenDeleteForm = () => {
     setOpenConfirmationForm(true);
   };
 
+  const handleCloseEdit = () => {
+    setOpenEditForm(false);
+  };
+
   const handleClose = () => {
     setOpenConfirmationForm(false);
+  };
+
+  const handleEdit = (newTitle: string, newDescription: string) => {
+    openEditForm(columnId, _id, newTitle, order, newDescription);
+    setOpenEditForm(false);
   };
 
   const handleDelete = () => {
@@ -72,19 +96,30 @@ function Task({
         )}
       </Box>
 
-      {!isOverlay && (
-        <Dialog open={openConfirmationForm} onClose={handleClose} maxWidth="xs" fullWidth>
-          <DialogContent className={styles.dialogContent}>
-            <Suspense fallback={<Loader />}>
-              <ConfirmationPopup
-                itemToDelete={t('deleteTaskInfo', { title })}
-                onClose={handleClose}
-                onDelete={handleDelete}
-              />
-            </Suspense>
-          </DialogContent>
-        </Dialog>
-      )}
+      <Dialog open={openConfirmationForm} onClose={handleClose} maxWidth="xs" fullWidth>
+        <DialogContent className={styles.dialogConfirmation}>
+          <Suspense fallback={<Loader />}>
+            <ConfirmationPopup
+              itemToDelete={t('deleteTaskInfo', { title })}
+              onClose={handleClose}
+              onDelete={handleDelete}
+            />
+          </Suspense>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={editForm} onClose={handleCloseEdit} maxWidth="xs" fullWidth>
+        <h3 className={styles.formTitle}>{t('editTask')}</h3>
+        <DialogContent className={styles.dialogEdit}>
+          <Suspense fallback={<Loader />}>
+            <EditTaskForm
+              currentTaskTitle={title}
+              currentTaskDescription={description}
+              updateTaskOnEdit={handleEdit}
+              onClose={handleCloseEdit}
+            />
+          </Suspense>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

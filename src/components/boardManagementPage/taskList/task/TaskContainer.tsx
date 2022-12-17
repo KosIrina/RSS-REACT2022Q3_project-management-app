@@ -7,13 +7,21 @@ import { TTask } from 'models/types';
 interface TTaskContainerProps extends TTask {
   columnId: string;
   deleteTask: (columnId: string, taskId: string) => void;
-  openEditForm: () => void;
+  openEditForm: (
+    columnId: string,
+    taskId: string,
+    title: string,
+    order: number,
+    description: string
+  ) => void;
 }
 
 function TaskContainer({
   _id: id,
   title,
+  description,
   columnId,
+  order,
   deleteTask,
   openEditForm,
 }: TTaskContainerProps) {
@@ -38,6 +46,10 @@ function TaskContainer({
     <li style={style} ref={setNodeRef} {...attributes} {...listeners}>
       <Task
         title={title}
+        description={description}
+        order={order}
+        columnId={columnId}
+        _id={id}
         isDragging={isDragging}
         deleteTask={handleDeleteTask}
         openEditForm={openEditForm}

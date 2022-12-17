@@ -21,5 +21,7 @@
   "deleteTaskInfo": "задачу ''{{ title }}''",
   "formTitle": "Создание колонки",
   "createTask": "Создание задачи",
-  "editTask": "Редактировать задание"
+  "editTask": "Редактировать задание",
+  "taskNotUpdated": "Задание не обновилось",
+  "taskUpdated": "Задание обновлено"
 }
